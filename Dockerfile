@@ -1,15 +1,23 @@
-FROM node:latest
+# Base image
+FROM node:18-alpine
 
+# Set the working directory in the container
 WORKDIR /app
 
-COPY package.json ./
+# Copy package.json and yarn.lock (if using yarn)
+COPY package.json yarn.lock ./
 
-RUN yarn install
+# Install dependencies
+RUN yarn install --production --silent
 
-COPY . .
+# Copy the application code
+COPY . ./
 
+# Build the React application
 RUN yarn build
 
+# Expose the desired port (e.g., 80 for HTTP)
 EXPOSE 8080
 
-CMD ["yarn", "dev"]
+# Start the React application
+CMD ["yarn", "start"]
