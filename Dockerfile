@@ -1,20 +1,23 @@
-# Base image
-FROM node:latest
+# Use the official Node.js v18 image as the base
+FROM node:18
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and yarn.lock (if using yarn)
-COPY package.json ./
+# Copy package.json and yarn.lock to the container
+COPY package.json yarn.lock ./
 
 # Install dependencies
-RUN npm install
+RUN yarn install --frozen-lockfile
 
-# Copy the application code
-COPY . ./
+# Copy the entire project to the container
+COPY . .
 
-# Expose the desired port (e.g., 80 for HTTP)
+# Build the React app
+RUN yarn build
+
+# Expose the desired port
 EXPOSE 8080
 
-# Start the React application
-CMD ["npm", "start"]
+# Set the command to start the app
+CMD ["yarn", "start"]
